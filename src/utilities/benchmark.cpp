@@ -3,6 +3,7 @@
 #include <chrono>
 #include <memory>
 #include <thread>
+#include <pthread.h>
 #include <vector>
 
 Benchmark::Benchmark(bool load, size_t num_workers, size_t warmup_duration,
