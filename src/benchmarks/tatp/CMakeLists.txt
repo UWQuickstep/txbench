@@ -3,6 +3,7 @@ add_library(
         tatp_benchmark.h tatp_benchmark.cpp
         tatp_connection.h
         tatp_server.h
+        tatp_util.h tatp_util.cpp
         tatp_worker.h tatp_worker.cpp
 )
 

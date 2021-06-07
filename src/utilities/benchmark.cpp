@@ -5,12 +5,16 @@
 #include <thread>
 #include <vector>
 
-Benchmark::Benchmark(size_t num_workers, size_t warmup_duration,
+Benchmark::Benchmark(bool load, size_t num_workers, size_t warmup_duration,
                      size_t measure_duration)
-    : num_workers_(num_workers), warmup_duration_(warmup_duration),
+    : load_(load), num_workers_(num_workers), warmup_duration_(warmup_duration),
       measure_duration_(measure_duration) {}
 
 double Benchmark::run() {
+  if (load_) {
+    load();
+  }
+
   std::vector<std::unique_ptr<Worker>> workers;
   workers.reserve(num_workers_);
 

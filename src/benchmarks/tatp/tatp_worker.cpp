@@ -1,12 +1,8 @@
 #include "tatp_worker.h"
 
+#include "tatp_util.h"
 #include "utilities/random_generator.h"
 #include <stdexcept>
-
-std::string leading_zero_pad(int length, const std::string &s) {
-  assert(length >= s.length());
-  return std::string(length - s.length(), '0') + s;
-}
 
 TATPWorker::TATPWorker(size_t num_rows,
                        std::unique_ptr<TATPConnection> connection)

@@ -6,7 +6,6 @@
 class TATPServer {
 public:
   virtual ~TATPServer() = default;
-  virtual void load() = 0;
   virtual std::unique_ptr<TATPConnection> connect() = 0;
 };
 

@@ -8,7 +8,7 @@
 
 class TATPBenchmark : public Benchmark {
 public:
-  TATPBenchmark(std::unique_ptr<TATPServer> server, size_t num_rows,
+  TATPBenchmark(std::unique_ptr<TATPServer> server, size_t num_rows, bool load,
                 size_t num_workers, size_t warmup_duration,
                 size_t measure_duration);
 

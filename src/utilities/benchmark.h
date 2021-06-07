@@ -7,7 +7,7 @@
 
 class Benchmark {
 public:
-  Benchmark(size_t num_workers, size_t warmup_duration,
+  Benchmark(bool load, size_t num_workers, size_t warmup_duration,
             size_t measure_duration);
 
   double run();
@@ -17,6 +17,7 @@ protected:
   virtual std::unique_ptr<Worker> make_worker() = 0;
 
 private:
+  bool load_;
   size_t num_workers_;
   size_t warmup_duration_;
   size_t measure_duration_;
