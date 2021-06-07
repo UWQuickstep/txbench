@@ -3,25 +3,19 @@ project(txbench)
 
 set(CMAKE_CXX_STANDARD 17)
 
-find_package(Threads REQUIRED)
+set(CMAKE_POLICY_DEFAULT_CMP0077 NEW)
 
-add_subdirectory(benchmarks)
+include(FetchContent)
 
-add_library(
-        txbench
-        benchmark.h benchmark.cpp
-        loader.h
-        worker.h
-        random_generator.h random_generator.cpp
+FetchContent_Declare(
+        cxxopts
+        GIT_REPOSITORY https://github.com/jarro2783/cxxopts.git
+        GIT_TAG v2.2.1
 )
+set(CXXOPTS_BUILD_EXAMPLES OFF)
+set(CXXOPTS_BUILD_TESTS OFF)
+set(CXXOPTS_ENABLE_INSTALL OFF)
+set(CXXOPTS_ENABLE_WARNINGS OFF)
+FetchContent_MakeAvailable(cxxopts)
 
-target_include_directories(
-        txbench
-        PRIVATE
-        ${CMAKE_SOURCE_DIR}
-)
-
-target_link_libraries(
-        txbench
-        Threads::Threads
-)
+add_subdirectory(src)
