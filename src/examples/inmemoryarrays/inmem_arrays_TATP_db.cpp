@@ -1,6 +1,10 @@
 #include "inmem_arrays_TATP_db.h"
 
 
+void InMemArraysTATPDB::print_stats() {
+
+}
+
 void InMemArraysTATPDB::new_subscriber_row(int s_id, std::string sub_nbr,
                         std::array<bool, 10> bit, std::array<int, 10> hex,
                         std::array<int, 10> byte2, int msc_location,

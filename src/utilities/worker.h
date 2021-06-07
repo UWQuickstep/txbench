@@ -2,6 +2,7 @@
 #define TXBENCH_SRC_UTILITIES_WORKER_H
 
 #include <atomic>
+#include <cstddef>
 
 class Worker {
 public:

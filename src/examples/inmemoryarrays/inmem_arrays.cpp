@@ -85,6 +85,10 @@ class InMemArraysTATPServer : public TATPServer {
     return std::make_unique<InMemArraysTATPConnection>(db_.get());
   }
 
+  void print_db_stats() {
+    db_->print_stats();
+  }
+
   std::unique_ptr<InMemArraysTATPDB> db_;
 };
 
@@ -95,6 +99,8 @@ int main(int argc, char **argv) {
   double tps = benchmark.run();
 
   std::cout << "Throughput (tps): " << tps << std::endl;
+
+  server->print_db_stats;
 
   return 0;
 }

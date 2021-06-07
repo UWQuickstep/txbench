@@ -71,6 +71,8 @@ class InMemArraysTATPDB {
 
   InMemArraysTATPDB() {}
 
+  void print_stats();
+
   void new_subscriber_row(int s_id, std::string sub_nbr,
                           std::array<bool, 10> bit, std::array<int, 10> hex,
                           std::array<int, 10> byte2, int msc_location,
