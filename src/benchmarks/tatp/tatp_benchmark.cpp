@@ -16,7 +16,7 @@ TATPBenchmark::TATPBenchmark(std::unique_ptr<TATPServer> server,
 
 TATPBenchmark TATPBenchmark::parse(int argc, char **argv,
                                    std::unique_ptr<TATPServer> server) {
-  Options options("tatp", "The TATP benchmark");
+  Options options(argv[0], "The TATP benchmark");
 
   options.add<size_t>("num_rows", "Number of rows in the Subscriber table",
                       true);
