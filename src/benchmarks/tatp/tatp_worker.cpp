@@ -16,7 +16,8 @@ TATPWorker::TATPWorker(size_t num_rows,
                                     : 2097151),
       connection_(std::move(connection)) {}
 
-void TATPWorker::run(std::atomic_bool &terminate) {
+void TATPWorker::run(std::atomic_bool &terminate,
+                     std::atomic_uint32_t &commit_count) {
   RandomGenerator rg;
 
   while (!terminate) {
@@ -95,6 +96,6 @@ void TATPWorker::run(std::atomic_bool &terminate) {
       connection_->delete_call_forwarding(sub_nbr, sf_type, start_time);
     }
 
-    commit_count_++;
+    commit_count++;
   }
 }

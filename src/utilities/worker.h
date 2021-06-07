@@ -10,10 +10,8 @@ public:
 
   size_t get_commit_count() const;
 
-  virtual void run(std::atomic_bool &terminate) = 0;
-
-protected:
-  std::atomic_size_t commit_count_;
+  virtual void run(std::atomic_bool &terminate,
+                   std::atomic_uint32_t &commit_count) = 0;
 };
 
 #endif // TXBENCH_SRC_UTILITIES_WORKER_H

@@ -27,31 +27,29 @@ double Benchmark::run() {
   threads.reserve(num_workers_);
 
   std::atomic_bool terminate = false;
+  std::atomic_uint32_t completed_txs = 0;
+  uint32_t warmup_commit_count = 0;
+  uint32_t total_commit_count = 0;
 
   for (const std::unique_ptr<Worker> &worker : workers) {
-    threads.emplace_back([&] { worker->run(terminate); });
+    threads.emplace_back([&] { worker->run(terminate, completed_txs); });
   }
 
   std::this_thread::sleep_for(std::chrono::seconds(warmup_duration_));
 
-  size_t warmup_commit_count = 0;
-  for (const std::unique_ptr<Worker> &worker : workers) {
-    warmup_commit_count += worker->get_commit_count();
-  }
+  warmup_commit_count = completed_txs;
 
   std::this_thread::sleep_for(std::chrono::seconds(measure_duration_));
 
-  size_t total_commit_count = 0;
-  for (const std::unique_ptr<Worker> &worker : workers) {
-    total_commit_count += worker->get_commit_count();
-  }
+  total_commit_count = completed_txs;
 
   terminate = true;
   for (std::thread &thread : threads) {
     thread.join();
   }
 
-  size_t measure_commit_count = total_commit_count - warmup_commit_count;
+  uint32_t measure_commit_count = total_commit_count - warmup_commit_count;
   double tps = (double)measure_commit_count / (double)measure_duration_;
+
   return tps;
 }
