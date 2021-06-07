@@ -7,6 +7,7 @@
 #include <algorithm>
 #include <memory>
 #include <vector>
+#include <climits>
 
 TATPBenchmark::TATPBenchmark(std::unique_ptr<TATPServer> server,
                              size_t num_rows, bool load, size_t num_workers,
