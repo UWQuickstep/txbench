@@ -7,6 +7,9 @@ set(CMAKE_POLICY_DEFAULT_CMP0077 NEW)
 
 include(FetchContent)
 
+set(THREADS_PREFER_PTHREAD_FLAG ON)
+find_package(Threads REQUIRED)
+
 FetchContent_Declare(
         cxxopts
         GIT_REPOSITORY https://github.com/jarro2783/cxxopts.git

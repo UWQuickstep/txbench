@@ -100,7 +100,7 @@ int main(int argc, char **argv) {
 
   std::cout << "Throughput (tps): " << tps << std::endl;
 
-  server->print_db_stats;
+  server->print_db_stats();
 
   return 0;
 }

@@ -4,6 +4,8 @@ add_executable(
         inmem_arrays_TATP_db.cpp
 )
 
-target_include_directories(inmemarrays PRIVATE ${CMAKE_SOURCE_DIR}/src)
+target_include_directories(inmemarrays
+        PRIVATE ${CMAKE_SOURCE_DIR}/src
+        PRIVATE Threads::Threads)
 
 target_link_libraries(inmemarrays txbench_tatp)
