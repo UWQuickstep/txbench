@@ -1,6 +1,7 @@
 #include "tatp_util.h"
 
 #include <random>
+#include <algorithm>
 
 std::string leading_zero_pad(size_t length, const std::string &s) {
   assert(length >= s.length());
