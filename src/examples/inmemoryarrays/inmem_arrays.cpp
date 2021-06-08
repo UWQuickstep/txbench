@@ -5,7 +5,8 @@
 
 class InMemArraysTATPConnection : public TATPConnection {
  public:
-  InMemArraysTATPConnection(InMemArraysTATPDB *db) : db_(db) {}
+  InMemArraysTATPConnection(std::shared_ptr<InMemArraysTATPDB> db) : db_(db) {}
+
   void new_subscriber_row(int s_id, std::string sub_nbr,
                           std::array<bool, 10> bit, std::array<int, 10> hex,
                           std::array<int, 10> byte2, int msc_location,
@@ -42,7 +43,7 @@ class InMemArraysTATPConnection : public TATPConnection {
   }
 
   void get_new_destination(int s_id, int sf_type, int start_time, int end_time,
-                           std::string *numberx) override {
+                           std::vector<std::string> *numberx) override {
     return db_->get_new_destination(s_id, sf_type, start_time, end_time,
                                     numberx);
   }
@@ -73,34 +74,35 @@ class InMemArraysTATPConnection : public TATPConnection {
   }
 
  private:
-  InMemArraysTATPDB *db_;
+  std::shared_ptr<InMemArraysTATPDB> db_;
 };
 
 class InMemArraysTATPServer : public TATPServer {
  public:
   InMemArraysTATPServer() :
-  db_(std::make_unique<InMemArraysTATPDB>()) {}
+  db_(std::make_shared<InMemArraysTATPDB>()) {}
 
   std::unique_ptr<TATPConnection> connect() override {
-    return std::make_unique<InMemArraysTATPConnection>(db_.get());
+    return std::make_unique<InMemArraysTATPConnection>(db_);
   }
 
   void print_db_stats() {
     db_->print_stats();
   }
 
-  std::unique_ptr<InMemArraysTATPDB> db_;
+  std::shared_ptr<InMemArraysTATPDB> db_;
 };
 
 int main(int argc, char **argv) {
   auto server = std::make_unique<InMemArraysTATPServer>();
+  std::shared_ptr<InMemArraysTATPDB> db = server->db_;
 
   TATPBenchmark benchmark = TATPBenchmark::parse(argc, argv, std::move(server));
   double tps = benchmark.run();
 
-  std::cout << "Throughput (tps): " << tps << std::endl;
+  db->print_stats();
 
-  server->print_db_stats();
+  std::cout << "Throughput (tps): " << tps << std::endl;
 
   return 0;
 }

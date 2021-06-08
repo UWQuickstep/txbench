@@ -46,9 +46,9 @@ void TATPWorker::run(std::atomic_bool &terminate,
       int start_times_possible[] = {0, 8, 16};
       int start_time = start_times_possible[rg.random_int(0, 2)];
       int end_time = rg.random_int(1, 24);
-      std::string numberx;
+      std::vector<std::string> numberxs;
       connection_->get_new_destination(s_id, sf_type, start_time, end_time,
-                                       &numberx);
+                                       &numberxs);
 
     } else if (transaction_type < 80) {
       // GET_ACCESS_DATA

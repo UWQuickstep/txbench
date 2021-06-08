@@ -66,6 +66,28 @@ struct CFRow {
         const std::string &numberx);
 };
 
+struct Tx1Res {
+  int s_id;
+  std::string sub_nbr;
+  std::array<bool, 10> bit;
+  std::array<int, 10> hex;
+  std::array<int, 10> byte2;
+  int msc_location;
+  int vlr_location;
+};
+
+struct Tx2Res {
+  std::vector<std::string> numberx;
+};
+
+struct Tx3Res {
+  std::vector<int> data1;
+  std::vector<int> data2;
+  std::vector<std::string> data3;
+  std::vector<std::string> data4;
+};
+
+
 class InMemArraysTATPDB {
  public:
 
@@ -93,7 +115,7 @@ class InMemArraysTATPDB {
                            int *vlr_location);
 
   void get_new_destination(int s_id, int sf_type, int start_time, int end_time,
-                           std::string *numberx);
+                           std::vector<std::string> *numberx);
 
   void get_access_data(int s_id, int ai_type, int *data1, int *data2,
                        std::string *data3, std::string *data4);
@@ -112,6 +134,13 @@ class InMemArraysTATPDB {
   std::vector<AIRow> ai_;
   std::vector<SFRow> sf_;
   std::vector<CFRow> cf_;
+
+  std::atomic_uint32_t tx1_succ = 0, tx2_succ = 0, tx3_succ = 0, tx4_succ = 0,
+                       tx5_succ = 0, tx6_succ = 0, tx7_succ = 0;
+  std::atomic_uint32_t  tx1_total = 0, tx2_total = 0, tx3_total = 0,
+                        tx4_total = 0, tx5_total = 0, tx6_total = 0,
+                        tx7_total = 0;
+
 };
 
 #endif //TXBENCH_SRC_EXAMPLES_INMEMORYARRAYS_INMEMARRAYSTATPDB_H_

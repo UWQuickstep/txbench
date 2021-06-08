@@ -55,7 +55,7 @@ public:
   }
 
   void get_new_destination(int s_id, int sf_type, int start_time, int end_time,
-                           std::string *numberx) override {
+                           std::vector<std::string> *numberx) override {
     std::cout << "get_new_destination(" << s_id << "," << sf_type << ","
               << start_time << "," << end_time << ")" << std::endl;
   }

@@ -5,6 +5,7 @@
 #include <thread>
 #include <pthread.h>
 #include <vector>
+#include <iostream>
 
 Benchmark::Benchmark(bool load, size_t num_workers, size_t warmup_duration,
                      size_t measure_duration)
@@ -14,6 +15,7 @@ Benchmark::Benchmark(bool load, size_t num_workers, size_t warmup_duration,
 double Benchmark::run() {
   if (load_) {
     load();
+    std::cout << "Loading done" << std::endl;
   }
 
   std::vector<std::unique_ptr<Worker>> workers;
