@@ -1,3 +1,6 @@
+add_subdirectory(alex)
+add_subdirectory(palm)
+
 add_executable(
         inmemarrays
         inmem_arrays.cpp

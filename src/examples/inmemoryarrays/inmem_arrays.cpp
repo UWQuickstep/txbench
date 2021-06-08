@@ -3,9 +3,10 @@
 #include <iostream>
 #include <memory>
 
+template <typename DBType>
 class InMemArraysTATPConnection : public TATPConnection {
  public:
-  InMemArraysTATPConnection(std::shared_ptr<InMemArraysTATPDB> db) : db_(db) {}
+  InMemArraysTATPConnection(std::shared_ptr<DBType> db) : db_(db) {}
 
   void new_subscriber_row(int s_id, std::string sub_nbr,
                           std::array<bool, 10> bit, std::array<int, 10> hex,
@@ -74,28 +75,29 @@ class InMemArraysTATPConnection : public TATPConnection {
   }
 
  private:
-  std::shared_ptr<InMemArraysTATPDB> db_;
+  std::shared_ptr<DBType> db_;
 };
 
+template <typename DBType>
 class InMemArraysTATPServer : public TATPServer {
  public:
   InMemArraysTATPServer() :
-  db_(std::make_shared<InMemArraysTATPDB>()) {}
+  db_(std::make_shared<DBType>()) {}
 
   std::unique_ptr<TATPConnection> connect() override {
-    return std::make_unique<InMemArraysTATPConnection>(db_);
+    return std::make_unique<InMemArraysTATPConnection<DBType>>(db_);
   }
 
   void print_db_stats() {
     db_->print_stats();
   }
 
-  std::shared_ptr<InMemArraysTATPDB> db_;
+  std::shared_ptr<DBType> db_;
 };
 
 int main(int argc, char **argv) {
-  auto server = std::make_unique<InMemArraysTATPServer>();
-  std::shared_ptr<InMemArraysTATPDB> db = server->db_;
+  auto server = std::make_unique<InMemArraysTATPServer<AlexTATPDB>>();
+  std::shared_ptr<AlexTATPDB> db = server->db_;
 
   TATPBenchmark benchmark = TATPBenchmark::parse(argc, argv, std::move(server));
   double tps = benchmark.run();
