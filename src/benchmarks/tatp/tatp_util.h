@@ -3,6 +3,7 @@
 
 #include "utilities/random_generator.h"
 #include <string>
+#include <cassert>
 
 std::string leading_zero_pad(size_t length, const std::string &s);
 std::string uppercase_string(size_t length, RandomGenerator &rg);

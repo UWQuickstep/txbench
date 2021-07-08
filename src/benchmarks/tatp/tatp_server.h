@@ -2,6 +2,7 @@
 #define TXBENCH_SRC_BENCHMARKS_TATP_TATP_SERVER_H
 
 #include "tatp_connection.h"
+#include <memory>
 
 class TATPServer {
 public:

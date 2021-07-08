@@ -7,6 +7,7 @@
 #include <algorithm>
 #include <memory>
 #include <vector>
+#include <climits>
 
 TATPBenchmark::TATPBenchmark(std::unique_ptr<TATPServer> server,
                              size_t num_rows, bool load, size_t num_workers,
@@ -32,17 +33,17 @@ TATPBenchmark TATPBenchmark::parse(int argc, char **argv,
   size_t num_rows = result["num_rows"].as<size_t>();
   size_t num_workers = result["num_workers"].as<size_t>();
 
-  bool load = false;
+  bool load = true;
   if (result.count("load")) {
     load = true;
   }
 
-  size_t warmup_duration = 10;
+  size_t warmup_duration = 2;
   if (result.count("warmup_duration")) {
     warmup_duration = result["warmup_duration"].as<size_t>();
   }
 
-  size_t measure_duration = 60;
+  size_t measure_duration = 2;
   if (result.count("measure_duration")) {
     measure_duration = result["measure_duration"].as<size_t>();
   }

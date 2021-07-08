@@ -11,7 +11,8 @@ class TATPWorker : public Worker {
 public:
   TATPWorker(size_t num_rows, std::unique_ptr<TATPConnection> connection);
 
-  void run(std::atomic_bool &terminate) override;
+  void run(std::atomic_bool &terminate,
+           std::atomic_uint32_t &commit_count) override;
 
 private:
   int num_rows_;

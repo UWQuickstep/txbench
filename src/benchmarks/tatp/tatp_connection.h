@@ -5,7 +5,7 @@
 #include <string>
 
 class TATPConnection {
-public:
+ public:
   virtual ~TATPConnection() = default;
 
   // Loading functions.
@@ -34,8 +34,11 @@ public:
                                    std::array<int, 10> &byte2,
                                    int *msc_location, int *vlr_location) = 0;
 
-  virtual void get_new_destination(int s_id, int sf_type, int start_time,
-                                   int end_time, std::string *numberx) = 0;
+  virtual void get_new_destination(int s_id,
+                                   int sf_type,
+                                   int start_time,
+                                   int end_time,
+                                   std::vector<std::string> *numberx) = 0;
 
   virtual void get_access_data(int s_id, int ai_type, int *data1, int *data2,
                                std::string *data3, std::string *data4) = 0;
