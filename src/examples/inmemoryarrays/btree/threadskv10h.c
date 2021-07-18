@@ -29,7 +29,7 @@ REDISTRIBUTION OF THIS SOFTWARE.
 
 // Please see the project home page for documentation
 // code.google.com/p/high-concurrency-btree
-
+/*
 #define _FILE_OFFSET_BITS 64
 #define _LARGEFILE64_SOURCE
 
@@ -51,16 +51,15 @@ REDISTRIBUTION OF THIS SOFTWARE.
 #include <pthread.h>
 #include <limits.h>
 #else
-
-//#define WIN32_LEAN_AND_MEAN
-//#include <windows.h>
-//#include <stdio.h>
-//#include <stdlib.h>
-//#include <time.h>
-//#include <fcntl.h>
-//#include <process.h>
-//#include <intrin.h>
-//#endif
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#include <fcntl.h>
+#include <process.h>
+#include <intrin.h>
+#endif
 
 #include <memory.h>
 #include <string.h>
@@ -102,7 +101,7 @@ There are six lock types for each node in four independent sets:
 4. (set 2) WriteLock: Exclusive. Modify the node. Incompatible with ReadLock and other WriteLocks. 
 5. (set 3) ParentModification: Exclusive. Change the node's parent keys. Incompatible with another ParentModification. 
 6. (set 4) LinkModification: Exclusive. Update of a node's left link is underway. Incompatible with another LinkModification. 
-*/
+
 
 typedef enum{
 	BtLockAccess = 1,
@@ -349,6 +348,7 @@ extern void bt_mgrclose (BtMgr *mgr);
 BTERR bt_atomicexec(BtMgr *mgr, BtPage source, uint count, pid_t tid);
 BTERR bt_promote (BtDb *bt);
 
+
 //  The page is allocated from low and hi ends.
 //  The key slots are allocated from the bottom,
 //	while the text and value of the key
@@ -394,7 +394,9 @@ BTERR bt_promote (BtDb *bt);
 
 //	Access macros to address slot and key values from the page
 //	Page slots use 1 based indexing.
+*/
 
+#include "btree.h"
 #define slotptr(page, slot) (((BtSlot *)(page+1)) + ((slot)-1))
 #define keyptr(page, slot) ((BtKey*)((unsigned char*)(page) + slotptr(page, slot)->off))
 #define valptr(page, slot) ((BtVal*)(keyptr(page,slot)->key + keyptr(page,slot)->len))

@@ -1,5 +1,5 @@
 #include "../inmem_arrays_TATP_db.h"
-#include "inmem_arrays_TATP_db_TLX.h"
+#include "inmem_arrays_TATP_db_BTREE.h"
 //#include "inmem_arrays_TATP_db_PALM.h"
 
 #include <iostream>
@@ -46,7 +46,7 @@ void BtreeTATPDB::new_subscriber_row(int s_id,
                             msc_location, vlr_location,
                             mtx_id++};
 
-  s_alex_.insert(s_id, s_heap_index_++);
+//  s_alex_.insert(s_id, s_heap_index_++);
 
 //  s_alex_.insert(s_id, {s_id, sub_nbr, bit, hex, byte2,
 //                        msc_location, vlr_location,

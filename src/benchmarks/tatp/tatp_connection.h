@@ -3,6 +3,7 @@
 
 #include <array>
 #include <string>
+#include <vector>
 
 class TATPConnection {
  public:

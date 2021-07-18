@@ -7,7 +7,9 @@
 #include <array>
 #include <shared_mutex>
 
-#include "alex_lib/alex.h"
+extern "C" {
+#include "btree.h"
+}
 
 class BtreeTATPDB {
  public:
@@ -19,7 +21,7 @@ class BtreeTATPDB {
     delete[] ai_heap_;
     delete[] sf_heap_;
     delete[] cf_heap_;
-//    delete[] s_row_mtxs_;
+    //bt_mgrclose(btmgr);
   }
 
   void init(int num_rows) {
@@ -27,7 +29,21 @@ class BtreeTATPDB {
     ai_heap_ = new AIRow[num_rows * 4];
     sf_heap_ = new SFRow[num_rows * 12];
     cf_heap_ = new CFRow[num_rows * 4];
-//    s_row_mtxs_ = new std::shared_mutex[num_rows];
+
+btmgrs1 = bt_mgr("bufmgrs1", 16, 4, 500);
+btmgrs2 = bt_mgr("bufmgrs2", 16, 4, 500);
+btmgrai1 = bt_mgr("bufmgrai1", 16, 4, 500);
+btmgrai2 = bt_mgr("bufmgrai2", 16, 4, 500);
+btmgrsf1 = bt_mgr("bufmgrsf1", 16, 4, 500);
+btmgrsf2 = bt_mgr("bufmgrsf2", 16, 4, 500);
+btmgrcf1 = bt_mgr("bufmgrcf1", 16, 4, 500);
+btmgrcf2 = bt_mgr("bufmgrcf2", 16, 4, 500);
+
+bts  = bt_open(btmgrs1, btmgrs2);
+btai = bt_open(btmgrai1, btmgrai2);
+btsf = bt_open(btmgrsf1, btmgrsf2);
+btcf = bt_open(btmgrcf1, btmgrcf2);
+
   }
 
 
@@ -77,7 +93,7 @@ class BtreeTATPDB {
   std::vector<SFRow> sf_;
   std::vector<CFRow> cf_;
 
-  alex::Btree<int,
+/*  alex::Btree<int,
              int,
              alex::BtreeCompare,
              std::allocator<std::pair<int, int>>, false>
@@ -97,6 +113,21 @@ class BtreeTATPDB {
              alex::BtreeCompare,
              std::allocator<std::pair<int, int>>, false>
       cf_alex_;
+*/
+
+BtMgr* btmgrs1;
+BtMgr* btmgrs2;
+BtMgr* btmgrai1;
+BtMgr* btmgrai2;
+BtMgr* btmgrsf1;
+BtMgr* btmgrsf2;
+BtMgr* btmgrcf1;
+BtMgr* btmgrcf2;
+
+BtDb* bts;
+BtDb* btai;
+BtDb* btsf;
+BtDb* btcf;
 
   std::shared_mutex s_mutex_;
   std::shared_mutex ai_mutex_;

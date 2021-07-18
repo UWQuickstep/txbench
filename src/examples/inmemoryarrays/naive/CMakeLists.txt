@@ -9,5 +9,6 @@ target_include_directories(inmemarrays_naive
         PRIVATE Threads::Threads)
 
 target_link_libraries(inmemarrays_naive
+PRIVATE Threads::Threads
         txbench_tatp
-        alex_lib)
+      )

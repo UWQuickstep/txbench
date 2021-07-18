@@ -1,6 +1,6 @@
 #include "benchmarks/tatp/tatp_benchmark.h"
 #include "../inmem_arrays_TATP_db.h"
-#include "inmem_arrays_TATP_db_TLX.h"
+#include "inmem_arrays_TATP_db_BTREE.h"
 #include <iostream>
 #include <memory>
 

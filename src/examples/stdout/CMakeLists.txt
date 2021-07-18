@@ -6,4 +6,5 @@ target_include_directories(stdout_tatp
         PRIVATE ${CMAKE_SOURCE_DIR}/src
         PRIVATE Threads::Threads)
 
-target_link_libraries(stdout_tatp txbench_tatp)
+target_link_libraries(stdout_tatp PRIVATE txbench_tatp
+                      Threads::Threads)
