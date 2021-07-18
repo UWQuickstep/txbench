@@ -8,11 +8,9 @@ add_executable(
 )
 
 target_link_libraries(inmemarrays_btree
+PRIVATE Threads::Threads
         txbench_tatp)
 
 target_include_directories(inmemarrays_btree
         PRIVATE ${CMAKE_SOURCE_DIR}/src)
 
-target_link_libraries(inmemarrays_btree
-        txbench_tatp
-        )
