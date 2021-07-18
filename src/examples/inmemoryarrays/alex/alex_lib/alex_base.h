@@ -8,6 +8,14 @@
  * and other miscellaneous functions
  */
 
+
+extern double kExpSearchIterationsWeight;
+extern double kShiftsWeight;
+
+// TraverseToLeaf cost weights
+extern double kNodeLookupsWeight;
+extern double kModelSizeWeight;
+
 #pragma once
 
 #include <algorithm>
@@ -183,15 +191,7 @@ inline int get_offset(int word_id, uint64_t bit) {
   return (word_id << 6) + count_ones(bit - 1);
 }
 
-/*** Cost model weights ***/
 
-// Intra-node cost weights
-double kExpSearchIterationsWeight = 20;
-double kShiftsWeight = 0.5;
-
-// TraverseToLeaf cost weights
-double kNodeLookupsWeight = 20;
-double kModelSizeWeight = 5e-7;
 
 /*** Stat Accumulators ***/
 
@@ -384,8 +384,6 @@ class CPUID {
   const uint32_t& EDX() const { return regs[3]; }
 };
 
-// https://en.wikipedia.org/wiki/CPUID#EAX=7,_ECX=0:_Extended_Features
-bool cpu_supports_bmi() {
-  return static_cast<bool>(CPUID(7, 0).EBX() & (1 << 3));
-}
+bool cpu_supports_bmi();
+
 }

@@ -15,6 +15,8 @@ public:
   static TATPBenchmark parse(int argc, char **argv,
                              std::unique_ptr<TATPServer> server);
 
+  int num_rows() const {return num_rows_;}
+
 protected:
   void load() override;
   std::unique_ptr<Worker> make_worker() override;

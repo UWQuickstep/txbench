@@ -8,6 +8,7 @@ class TATPConnection {
  public:
   virtual ~TATPConnection() = default;
 
+  virtual void done_loading() {}
   // Loading functions.
 
   virtual void new_subscriber_row(int s_id, std::string sub_nbr,

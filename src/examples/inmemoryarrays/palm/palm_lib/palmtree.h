@@ -20,6 +20,8 @@
 #include "barrier.h"
 #include <jemalloc/jemalloc.h>
 
+#include "../palm_tatp_helpers.h"
+
 using std::cout;
 using std::endl;
 
@@ -30,7 +32,7 @@ using std::endl;
 namespace palmtree {
 
   static std::atomic<int> NODE_NUM(0);
-  unsigned int batch_id = 0;
+  static unsigned int batch_id = 0;
   /**
    * Tree operation types
    */
@@ -45,7 +47,7 @@ namespace palmtree {
     LEAFNODE
   };
 
-  class Stats {
+  static class Stats {
   public:
     Stats(int worker_num): worker_num_(worker_num) {}
     Stats() {}

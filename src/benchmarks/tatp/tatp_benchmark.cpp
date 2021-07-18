@@ -129,6 +129,9 @@ void TATPBenchmark::load() {
       }
     }
   }
+
+
+  conn->done_loading();
 }
 
 std::unique_ptr<Worker> TATPBenchmark::make_worker() {

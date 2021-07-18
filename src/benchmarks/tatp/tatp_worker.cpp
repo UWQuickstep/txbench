@@ -4,6 +4,7 @@
 #include "utilities/random_generator.h"
 #include <stdexcept>
 #include <climits>
+#include <iostream>
 
 TATPWorker::TATPWorker(size_t num_rows,
                        std::unique_ptr<TATPConnection> connection)

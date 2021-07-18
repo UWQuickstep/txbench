@@ -10,7 +10,33 @@ include(FetchContent)
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads REQUIRED)
 
-add_compile_options(-mavx2 -O3)
+if(MSVC)
+    set(CMAKE_CXX_FLAGS "/O2 /arch:AVX2 /W1 /EHsc")
+elseif (CMAKE_CXX_COMPILER_ID STREQUAL "Intel")
+    set(CMAKE_CXX_FLAGS "-O3 -xHost")
+else()
+    # clang and gcc
+    set(CMAKE_CXX_FLAGS "-O3 -march=native")
+endif()
+
+#set(Boost_USE_STATIC_LIBS OFF)
+#set(Boost_USE_MULTITHREADED ON)
+#set(Boost_USE_STATIC_RUNTIME OFF)
+#find_package(Boost )
+#message(STATUS "Boost version: ${Boost_VERSION}")
+#
+
+find_package (glog)
+
+set(BOOST_INCLUDE_DIRS /usr/local/Cellar/boost/1.72.0_1/include)
+set(GLOG_INCLUDE_DIRS /usr/local/Cellar/glog/0.4.0/include)
+set(GFLAG_INCLUDE_DIRS /usr/local/Cellar/gflags/2.2.2/include)
+set(JEMALLOC_INCLUDE_DIRS /usr/local/Cellar/jemalloc/5.2.1_1/include)
+
+link_directories(/usr/local/Cellar/boost/1.72.0_1/lib/)
+link_directories(${GLOG_INCLUDE_DIRS}/../lib)
+
+add_compile_options(-mavx2 -O3 -mlzcnt)
 
 FetchContent_Declare(
         cxxopts

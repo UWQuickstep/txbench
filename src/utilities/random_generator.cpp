@@ -18,8 +18,8 @@ std::mt19937 &RandomGenerator::mt() { return mt_; }
 
 int32_t RandomNonUniSid(int A, int size) {
   auto a =
-      ((RandomValue<int32_t>(0, A) | RandomValue<int32_t>(0, size - 1))
-          % (size - 1 - 0 + 1));
+      ((RandomValue<int32_t>(0, A) | RandomValue<int32_t>(1, size))
+          % (size  - 1 + 1)) + 1;
   return a;
 }
 
