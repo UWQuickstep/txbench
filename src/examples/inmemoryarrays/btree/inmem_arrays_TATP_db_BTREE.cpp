@@ -46,14 +46,14 @@ void BtreeTATPDB::new_subscriber_row(int s_id,
                             msc_location, vlr_location,
                             mtx_id++};
 
-  unsigned char keystr[10];
+  char keystr[10];
   sprintf(keystr, "%d", s_id);
   int len = strlen(keystr);
 
   if (bt_insertkey(btmgrs2, (unsigned char *) keystr,
-      len, 0, (void*) s_heap_index, sizeof(s_heap_index_),
+      len, 0, (void*) s_heap_index_, sizeof(s_heap_index_),
       BtSlotType::Unique ) != BTERR_ok) {
-    std::cout << "BAD insertion"
+    std::cout << "BAD insertion";
   }
 
 //  s_alex_.insert(s_id, s_heap_index_++);
