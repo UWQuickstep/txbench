@@ -6,10 +6,10 @@
 
 void BtreeTATPDB::print_stats() {
   std::cout << "BTREE sizes" << std::endl;
-  std::cout << "\tS: " << s_alex_.size() << std::endl;
-  std::cout << "\tAI: " << ai_alex_.size() << std::endl;
-  std::cout << "\tSF: " << sf_alex_.size() << std::endl;
-  std::cout << "\tCF: " << cf_alex_.size() << std::endl;
+//  std::cout << "\tS: " << s_alex_.size() << std::endl;
+//  std::cout << "\tAI: " << ai_alex_.size() << std::endl;
+//  std::cout << "\tSF: " << sf_alex_.size() << std::endl;
+//  std::cout << "\tCF: " << cf_alex_.size() << std::endl;
   std::cout << "Success rates" << std::endl;
   std::cout << "\tTx1: " << ((double) tx1_succ / tx1_total) * 100
             << "% (expected 100%, executed "
@@ -48,9 +48,6 @@ void BtreeTATPDB::new_subscriber_row(int s_id,
 
 //  s_alex_.insert(s_id, s_heap_index_++);
 
-//  s_alex_.insert(s_id, {s_id, sub_nbr, bit, hex, byte2,
-//                        msc_location, vlr_location,
-//                        mtx_id++});
 }
 
 void BtreeTATPDB::new_access_info_row(int s_id,
@@ -61,11 +58,8 @@ void BtreeTATPDB::new_access_info_row(int s_id,
                                      std::string data4) {
   ai_heap_[ai_heap_index_] = {s_id, ai_type, data1, data2,
                               std::move(data3), std::move(data4)};
-  ai_alex_.insert(to_ai_compound_key(s_id, ai_type), ai_heap_index_++);
-//
-//  ai_alex_.insert(to_ai_compound_key(s_id, ai_type),
-//                  {s_id, ai_type, data1, data2,
-//                   std::move(data3), std::move(data4)});
+//  ai_alex_.insert(to_ai_compound_key(s_id, ai_type), ai_heap_index_++);
+
 }
 
 void BtreeTATPDB::new_special_facility_row(int s_id,
@@ -74,17 +68,10 @@ void BtreeTATPDB::new_special_facility_row(int s_id,
                                           int error_cntrl,
                                           int data_a,
                                           std::string data_b) {
-//  sf_.emplace_back(s_id, sf_type, is_active, error_cntrl,
-//                   data_a, std::move(data_b));
-
-//  sf_alex_.insert(to_sf_compound_key(s_id, sf_type),
-//                  {s_id, sf_type, is_active, error_cntrl,
-//                   data_a, std::move(data_b)});
-
   sf_heap_[sf_heap_index_] = {s_id, sf_type, is_active, error_cntrl,
                               data_a, std::move(data_b)};
 
-  sf_alex_.insert(to_sf_compound_key(s_id, sf_type), sf_heap_index_++);
+//  sf_alex_.insert(to_sf_compound_key(s_id, sf_type), sf_heap_index_++);
 }
 
 void BtreeTATPDB::new_call_forwarding_row(int s_id,
@@ -92,16 +79,11 @@ void BtreeTATPDB::new_call_forwarding_row(int s_id,
                                          int start_time,
                                          int end_time,
                                          std::string numberx) {
-//  cf_.emplace_back(s_id, sf_type, start_time, end_time, std::move(numberx));
-
-//  cf_alex_.insert(to_cf_compound_key(s_id, sf_type, start_time),
-//                  {s_id, sf_type, start_time, end_time, std::move(numberx)});
-
   cf_heap_[cf_heap_index_] =
       {s_id, sf_type, start_time, end_time, std::move(numberx)};
 
-  cf_alex_.insert(to_cf_compound_key(s_id, sf_type, start_time),
-                  cf_heap_index_++);
+//  cf_alex_.insert(to_cf_compound_key(s_id, sf_type, start_time),
+//                  cf_heap_index_++);
 }
 
 void BtreeTATPDB::get_subscriber_data(int s_id,
@@ -117,20 +99,18 @@ void BtreeTATPDB::get_subscriber_data(int s_id,
   std::shared_lock lock(s_mutex_);
   //////
 
-  int *out = s_alex_.get_payload(s_id);
-  if (out == nullptr) { return; }
-
-  SRow *srow = &s_heap_[*out];
-
-//    std::shared_lock lock(s_row_mtxs_[srow->mtx_array_id]);
-//    [[likely]]
-  sub_nbr->assign(srow->sub_nbr);
-  bit = srow->bit;
-  hex = srow->hex;
-  byte2 = srow->byte2;
-  *msc_location = srow->msc_location;
-  *vlr_location = srow->vlr_location;
-  tx1_succ++;
+//  int *out = s_alex_.get_payload(s_id);
+//  if (out == nullptr) { return; }
+//
+//  SRow *srow = &s_heap_[*out];
+//
+//  sub_nbr->assign(srow->sub_nbr);
+//  bit = srow->bit;
+//  hex = srow->hex;
+//  byte2 = srow->byte2;
+//  *msc_location = srow->msc_location;
+//  *vlr_location = srow->vlr_location;
+//  tx1_succ++;
 
   return;
 }
@@ -155,28 +135,28 @@ void BtreeTATPDB::get_new_destination(int s_id,
   std::shared_lock lock1(cf_mutex_);
   /////
 
-  int *out = sf_alex_.get_payload(to_sf_compound_key(s_id, sf_type));
-  if (out == nullptr) { return; }
-
-  SFRow *sfrow = &sf_heap_[*out];
-  if (sfrow->is_active != 1) {
-    return;
-  }
-
-  auto cfiter_l = cf_alex_.lower_bound(to_cf_compound_key(s_id, sf_type, 0));
-  const auto cfiter_u =
-      cf_alex_.upper_bound(to_cf_compound_key(s_id, sf_type, start_time + 1));
-
-  while (cfiter_l != cfiter_u) {
-    if (cf_heap_[cfiter_l.payload()].end_time > end_time) {
-      numberxs->emplace_back(cf_heap_[cfiter_l.payload()].numberx);
-    }
-    cfiter_l++;
-  }
-
-  if (numberxs->size() > 0) {
-    tx2_succ++;
-  }
+//  int *out = sf_alex_.get_payload(to_sf_compound_key(s_id, sf_type));
+//  if (out == nullptr) { return; }
+//
+//  SFRow *sfrow = &sf_heap_[*out];
+//  if (sfrow->is_active != 1) {
+//    return;
+//  }
+//
+//  auto cfiter_l = cf_alex_.lower_bound(to_cf_compound_key(s_id, sf_type, 0));
+//  const auto cfiter_u =
+//      cf_alex_.upper_bound(to_cf_compound_key(s_id, sf_type, start_time + 1));
+//
+//  while (cfiter_l != cfiter_u) {
+//    if (cf_heap_[cfiter_l.payload()].end_time > end_time) {
+//      numberxs->emplace_back(cf_heap_[cfiter_l.payload()].numberx);
+//    }
+//    cfiter_l++;
+//  }
+//
+//  if (numberxs->size() > 0) {
+//    tx2_succ++;
+//  }
 
   return;
 }
@@ -197,16 +177,16 @@ void BtreeTATPDB::get_access_data(int s_id,
   std::shared_lock lock(ai_mutex_);
   ///
 
-  int *out = ai_alex_.get_payload(to_ai_compound_key(s_id, ai_type));
-  if (out == nullptr) { return; }
-
-  AIRow *airow = &ai_heap_[*out];
-
-  *data1 = airow->data1;
-  *data2 = airow->data2;
-  data3->assign(airow->data3);
-  data4->assign(airow->data4);
-  tx3_succ++;
+//  int *out = ai_alex_.get_payload(to_ai_compound_key(s_id, ai_type));
+//  if (out == nullptr) { return; }
+//
+//  AIRow *airow = &ai_heap_[*out];
+//
+//  *data1 = airow->data1;
+//  *data2 = airow->data2;
+//  data3->assign(airow->data3);
+//  data4->assign(airow->data4);
+//  tx3_succ++;
 
   return;
 }
@@ -223,24 +203,24 @@ void BtreeTATPDB::update_subscriber_data(int s_id,
 
   // UPDATE Subscriber SET bit_1 = <bit_rnd>
   // WHERE s_id = <s_id rnd subid>;
-
-  int *out = s_alex_.get_payload(s_id);
-  if (out == nullptr) { return; }
-
-  SRow *srow = &s_heap_[*out];
-
-  std::unique_lock lock1(sf_mutex_);
-
-  // UPDATE Special_Facility SET data_a = <data_a rnd>
-  // WHERE s_id = <s_id value subid> AND sf_type = <sf_type rnd>;
-  int *out2 = sf_alex_.get_payload(to_sf_compound_key(s_id, sf_type));
-  if (out2 == nullptr) { return; }
-  SFRow *sf_rowid = &sf_heap_[*out2];
-
-  // Perform both updates at the same time, instead of rolling back
-  srow->bit[0] = bit_1;
-  sf_rowid->data_a = data_a;
-  tx4_succ++;
+//
+//  int *out = s_alex_.get_payload(s_id);
+//  if (out == nullptr) { return; }
+//
+//  SRow *srow = &s_heap_[*out];
+//
+//  std::unique_lock lock1(sf_mutex_);
+//
+//  // UPDATE Special_Facility SET data_a = <data_a rnd>
+//  // WHERE s_id = <s_id value subid> AND sf_type = <sf_type rnd>;
+//  int *out2 = sf_alex_.get_payload(to_sf_compound_key(s_id, sf_type));
+//  if (out2 == nullptr) { return; }
+//  SFRow *sf_rowid = &sf_heap_[*out2];
+//
+//  // Perform both updates at the same time, instead of rolling back
+//  srow->bit[0] = bit_1;
+//  sf_rowid->data_a = data_a;
+//  tx4_succ++;
 
   return;
 }
@@ -256,15 +236,15 @@ void BtreeTATPDB::update_location(const std::string &sub_nbr,
   // UPDATE Subscriber SET vlr_location = <vlr_location rnd>
   // WHERE sub_nbr = <sub_nbr rndstr>;
 
-  int s_id = std::stoi(sub_nbr);
-
-  int *out = s_alex_.get_payload(s_id);
-  if (out == nullptr) { return; }
-
-  SRow *srow = &s_heap_[*out];
-//  std::unique_lock lock(s_row_mtxs_[srow->mtx_array_id]);
-  srow->vlr_location = vlr_location;
-  tx5_succ++;
+//  int s_id = std::stoi(sub_nbr);
+//
+//  int *out = s_alex_.get_payload(s_id);
+//  if (out == nullptr) { return; }
+//
+//  SRow *srow = &s_heap_[*out];
+////  std::unique_lock lock(s_row_mtxs_[srow->mtx_array_id]);
+//  srow->vlr_location = vlr_location;
+//  tx5_succ++;
 
   return;
 }
@@ -283,39 +263,39 @@ void BtreeTATPDB::insert_call_forwarding(std::string sub_nbr,
   //////
 
 
-  // SELECT <s_id bind subid s_id> FROM Subscriber
-  // WHERE sub_nbr = <sub_nbr rndstr>;
-
-  int s_id = std::stoi(sub_nbr);
-  int *out = s_alex_.get_payload(s_id);
-  if (out == nullptr) { return; }
-
-  SRow *srow = &s_heap_[*out];
-
-  // SELECT <sf_type bind sfid sf_type>
-  // FROM Special_Facility
-  // WHERE s_id = <s_id value subid>;
-
-  int *out2 = sf_alex_.get_payload(to_sf_compound_key(s_id, sf_type));
-  if (out2 == nullptr) { return; }
-  SFRow *sfrow = &sf_heap_[*out2];
-
-  // INSERT INTO Call_Forwarding
-  // VALUES (<s_id value subid>, <sf_type rnd sf_type>,
-  // <start_time rnd>, <end_time rnd>, <numberx rndstr>);
-
-  int *out3 =
-      cf_alex_.get_payload(to_cf_compound_key(s_id, sf_type, start_time));
-
-  if (out3 == nullptr) { return; }
-
-  cf_heap_[cf_heap_index_] =
-      {s_id, sf_type, start_time, end_time, std::move(numberx)};
-
-  cf_alex_.insert(to_cf_compound_key(s_id, sf_type, start_time),
-                  cf_heap_index_++);
-
-  tx6_succ++;
+//  // SELECT <s_id bind subid s_id> FROM Subscriber
+//  // WHERE sub_nbr = <sub_nbr rndstr>;
+//
+//  int s_id = std::stoi(sub_nbr);
+//  int *out = s_alex_.get_payload(s_id);
+//  if (out == nullptr) { return; }
+//
+//  SRow *srow = &s_heap_[*out];
+//
+//  // SELECT <sf_type bind sfid sf_type>
+//  // FROM Special_Facility
+//  // WHERE s_id = <s_id value subid>;
+//
+//  int *out2 = sf_alex_.get_payload(to_sf_compound_key(s_id, sf_type));
+//  if (out2 == nullptr) { return; }
+//  SFRow *sfrow = &sf_heap_[*out2];
+//
+//  // INSERT INTO Call_Forwarding
+//  // VALUES (<s_id value subid>, <sf_type rnd sf_type>,
+//  // <start_time rnd>, <end_time rnd>, <numberx rndstr>);
+//
+//  int *out3 =
+//      cf_alex_.get_payload(to_cf_compound_key(s_id, sf_type, start_time));
+//
+//  if (out3 == nullptr) { return; }
+//
+//  cf_heap_[cf_heap_index_] =
+//      {s_id, sf_type, start_time, end_time, std::move(numberx)};
+//
+//  cf_alex_.insert(to_cf_compound_key(s_id, sf_type, start_time),
+//                  cf_heap_index_++);
+//
+//  tx6_succ++;
 
   return;
 }
@@ -325,26 +305,26 @@ void BtreeTATPDB::delete_call_forwarding(const std::string &sub_nbr,
                                         int start_time) {
   tx7_total++;
 
-  //////
-  std::shared_lock lock(s_mutex_);
-  std::unique_lock lock1(cf_mutex_);
-  //////
-
-  // SELECT <s_id bind subid s_id> FROM Subscriber
-  // WHERE sub_nbr = <sub_nbr rndstr>;
-  int s_id = std::stoi(sub_nbr);
-  int *out = s_alex_.get_payload(s_id);
-  if (out == nullptr) { return; }
-
-  SRow *srow = &s_heap_[*out];
-
-  // DELETE FROM Call_Forwarding
-  // WHERE s_id = <s_id value subid> AND sf_type = <sf_type rnd>
-  // AND start_time = <start_time rnd>;
-
-  if (cf_alex_.erase_one(to_cf_compound_key(s_id, sf_type, start_time)) > 0) {
-    tx7_succ++;
-  }
+//  //////
+//  std::shared_lock lock(s_mutex_);
+//  std::unique_lock lock1(cf_mutex_);
+//  //////
+//
+//  // SELECT <s_id bind subid s_id> FROM Subscriber
+//  // WHERE sub_nbr = <sub_nbr rndstr>;
+//  int s_id = std::stoi(sub_nbr);
+//  int *out = s_alex_.get_payload(s_id);
+//  if (out == nullptr) { return; }
+//
+//  SRow *srow = &s_heap_[*out];
+//
+//  // DELETE FROM Call_Forwarding
+//  // WHERE s_id = <s_id value subid> AND sf_type = <sf_type rnd>
+//  // AND start_time = <start_time rnd>;
+//
+//  if (cf_alex_.erase_one(to_cf_compound_key(s_id, sf_type, start_time)) > 0) {
+//    tx7_succ++;
+//  }
 
   return;
 }
